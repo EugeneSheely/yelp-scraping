@@ -1,0 +1,473 @@
+print("""Hello Master, it's your humble slave, please place the original URL from page one, don't forget to add filters, like "Fences & Gates" and I'll search it""")
+originalurl = str(input("""Enter Yelp URL: """))
+csv_name = str(input("Add the name for the exported CSV file: "))+ ".csv"
+
+print("\nThanks for the instructions O mighty master, I'll get working to it now...")
+
+
+
+
+
+
+!apt install chromium-chromedriver
+!cp /usr/lib/chromium-browser/chromedriver /usr/bin
+!pip install selenium
+
+from selenium import webdriver
+options = webdriver.ChromeOptions()
+options.add_argument("-headless")
+options.add_argument("-no-sandbox")
+options.add_argument("-disable-dev-shm-usage")
+
+
+
+import selenium
+from selenium import webdriver
+from selenium.webdriver.support.select import Select
+import unittest
+import re, urllib.request, time
+from time import sleep
+import random
+from IPython.display import clear_output, display
+from tqdm import tqdm, tqdm_notebook
+import pandas as pd
+
+
+
+
+
+
+import requests 
+
+  
+# import only html class 
+from lxml import html
+ 
+# search_term = input("Hello Master, its your humble data scrapping slave. What shall I fetch for you? ")
+# search_city = input("What city is this in? ")
+# Search_state = input("What state is this in? ")
+
+#for DF: 
+dflist = []
+rowlist = []
+columns = ["Name", "Website", "Phone", "Address"]
+search_facebook_results = []
+search_email_results = []
+is_hyperlink = []
+hyperlink_leftovers = []
+
+
+name = "EMPTY"
+domain = "EMPTY"
+phone = "EMPTY"
+mapaddress = "EMPTY"
+category = "EMPTY"
+to_df = []
+#df = pd.DataFrame([to_df], columns = ["Name", "URL", "Facebook", "Phone", "Category", "Address", "Emails"])
+
+
+urlabout = [ originalurl,
+             originalurl + "&start=10",
+             originalurl + "&start=20",
+             originalurl + "&start=30",
+             originalurl + "&start=40",
+             originalurl + "&start=50",
+             originalurl + "&start=60",
+             originalurl + "&start=70",
+             originalurl + "&start=80",
+             originalurl + "&start=90",
+             originalurl + "&start=100",
+             originalurl + "&start=110",
+             originalurl + "&start=120",
+             originalurl + "&start=130",
+             originalurl + "&start=140",
+             originalurl + "&start=150",
+             originalurl + "&start=160",
+             originalurl + "&start=170",
+             originalurl + "&start=180",
+             originalurl + "&start=190",
+            originalurl + "&start=200",
+            originalurl + "&start=210",
+            originalurl + "&start=220",
+            originalurl + "&start=230",
+            originalurl + "&start=240",
+            originalurl + "&start=250",
+]
+
+            
+
+
+
+
+
+
+
+
+n=0
+list = []
+
+#COLUMNS
+print("Name", " | Website", " | Phone", " | Company Category"," | Address" , " | Emails" ,   )
+print("")
+
+
+# xpaths for general titel page search
+name1 = "//li[5]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+name2 = "//li[6]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+name3 = "//li[7]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+name4 = "//li[8]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+name5 = "//li[9]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+name6 = "//li[10]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+name7 = "//li[11]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+name8 = "//li[12]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+name9 = "//li[13]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+name10 = "//li[14]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+name11 = "//li[15]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+name12 = "//li[24]/div[1]/div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/h4[1]/span[1]/a[1]"
+
+
+#xpath for fencers site
+
+domainxpath = "//div[1]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/p[2]"
+phonexpath = "//div[2]/div[1]/div[@class='lemon--div__373c0__1mboc arrange-unit__373c0__o3tjT arrange-unit-fill__373c0__3Sfw1 border-color--default__373c0__3-ifU' and 2]/p[2]"
+categoryxpath = "//span[@class='lemon--span__373c0__3997G text__373c0__2Kxyz text-color--black-extra-light__373c0__2OyzO text-align--left__373c0__2XGa- text-size--large__373c0__3t60B']/a[1]"
+
+
+
+
+#xpath for address
+
+
+
+
+
+namesxpathlist = [name2,name3,name4,name5,name6,name7,name8,name9,name10,name11, name12]
+fencersitexpathlist = []
+namelist = []
+
+
+#LOOP STARTS
+
+
+for i in range(len(urlabout)):
+  #print("1 ",name)
+  
+  print("\nCurrently Searching in: ",  urlabout[i],"\n")
+
+  url = webdriver.Chrome("chromedriver",options=options)
+  url.get(urlabout[i])
+  url = r"{}".format(str(url.page_source))
+  currenturl = urlabout[i]
+  # get response object
+  try: 
+    response_about = requests.get(currenturl)
+  except requests.exceptions.ConnectionError:
+    r.status_code = "Connection refused"
+    
+  
+  # get byte string 
+  byte_data_about = response_about.content
+  # get filtered source code 
+  source_code_about = html.fromstring(byte_data_about)
+  for ib in range(10):
+
+    name = "EMPTY"
+    domain = "EMPTY"
+    phone = "EMPTY"
+    mapaddress = "EMPTY"
+    category = "EMPTY"
+    search_facebook_results = []
+    search_email_results = []
+    is_hyperlink = []
+    hyperlink_leftovers = []
+
+    #company name
+    sc = source_code_about.xpath(namesxpathlist[ib])
+    #print( "namesxpathlist[ib]: ", namesxpathlist[ib])
+    #print("sc: ", sc)
+    if len(sc) > 0:
+      sc = sc[0].text_content()
+      #Company name:
+      name = sc
+      #print(name)
+      #Specific yiptel url for company name:
+      urlregex = "/biz/"+ name.replace(" ","-").replace("’","").lower().replace(".","-").replace(",","").replace("----","-").replace("---","-").replace("--","-").replace("--","-").replace("--","-").replace("&","and")
+      #print("urlregex 1: ", urlregex)
+      urlregex = re.findall(urlregex.lower()+'(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', url)
+      #print("urlregex 2: ",urlregex)
+      try:
+        fencerurl = "https://www.yelp.com.sg" +urlregex[0]
+      except Exception:
+        pass
+      #print("fencerurl ",fencerurl)
+      try: 
+        response_about2 = requests.get(fencerurl)
+      except Exception:
+        pass
+      
+      #print("2 ",name)
+
+      #Get Domain, category and phone:
+      try:
+
+        byte_data_about2 = response_about2.content
+        source_code_about2 = html.fromstring(byte_data_about2)
+        domain =  source_code_about2.xpath(domainxpath)
+        phone = source_code_about2.xpath(phonexpath)
+        category = source_code_about2.xpath(categoryxpath)
+        if domain[0]== "+":
+          phone = domain
+      except Exception:
+        pass
+      
+      if len(domain) > 0:
+        domain = domain[0].text_content()
+      else:
+        domain = " http://ERROR"
+      if len(phone) > 0:
+        phone = phone[0].text_content()
+      else:
+        phone = "NOT FOUND"
+      if len(category) > 0:
+        category = category[0].text_content()
+      else:
+        category = " http://ERROR"
+
+      #print("3 ",name)
+
+      
+
+      #get address:           
+  
+      addressxpath = '//address'
+      try:
+        mapaddress = urlregex[0]
+        mapaddress = mapaddress.split('?')
+        mapaddress = mapaddress[0]
+        mapaddress = mapaddress.split('/biz/')
+        mapaddress = mapaddress[1]
+        mapaddress = 'https://www.yelp.com.sg/map/'+mapaddress
+      except Exception:
+        pass
+
+      try:
+        try: 
+         response_about3 = requests.get(mapaddress)
+        except requests.exceptions.ConnectionError:
+
+          r.status_code = "Connection refused"
+      except Exception:
+        pass             
+
+      #print("4 ",name)
+
+
+      try: 
+        byte_data_about3 = response_about3.content
+        source_code_about3 = html.fromstring(byte_data_about3)
+              
+        mapaddress =  source_code_about3.xpath(addressxpath)
+        if len(mapaddress) >0:
+          mapaddress = mapaddress[0].text_content()
+          #mapaddress = mapaddress.split('Ste D')
+          #mapaddress = mapaddress[0] + " , " + mapaddress[1]
+          #mapaddress = mapaddress.split('United States')
+          #mapaddress = mapaddress[0] + ", USA"
+        else: 
+          mapaddress = "NOT FOUND!"
+      except Exception:
+        pass
+
+      time.sleep(random.randint(5,14))
+
+      #get email and facebook:
+
+      search_email_list = ["https://www."+ domain, 
+                          "https://www."+ domain + "/contact", 
+                          "https://www."+ domain + "/contact-us",
+                          "https://www."+ domain + "/about" , 
+                          "https://www."+ domain + "/about-us",
+
+
+
+                          
+                          
+                          
+                          ]
+      domain_email = domain
+      search_facebook_results = [] 
+      search_email_results = []
+      search_email_results_unique = []
+
+      #search for Facebook account:
+      try:
+        for facebooksearch in range(len(search_email_list)):
+          
+          wb = webdriver.Chrome("chromedriver",options=options)
+          is_hyperlink = search_email_list[facebooksearch]
+
+          
+          if len(is_hyperlink) > 5:
+            domain_check = is_hyperlink[-4]+is_hyperlink[-3]+is_hyperlink[-2]+is_hyperlink[-1]
+            if domain_check == '.com' or domain_check == '.net' or domain_check == '.org' or domain_check == '.gov' or domain_check == 'tact' or domain_check == 't-us' or domain_check == 'bout':
+              try:
+                wb.get(search_email_list[facebooksearch])
+                wb = r"{}".format(str(wb.page_source))
+                facebook_found = re.findall(r'https://www.facebook.com/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', wb)
+                search_facebook_results = search_facebook_results+ facebook_found
+              except Exception:
+                pass
+      except Exception:
+        pass
+
+        
+
+
+      #search for email in domain name
+
+      for emailsearch in range(len(search_email_list)):
+        #print(search_email_list[emailsearch])
+        wb = webdriver.Chrome("chromedriver",options=options)
+        is_hyperlink = search_email_list[emailsearch]
+        if len(search_email_list[emailsearch]) > 5:
+          domain_check = is_hyperlink[-4]+is_hyperlink[-3]+is_hyperlink[-2]+is_hyperlink[-1]
+          if domain_check == '.com' or domain_check == '.net' or domain_check == '.org' or domain_check == '.gov'or domain_check == 'tact' or domain_check == 't-us' or domain_check == 'bout':
+            try:     
+              wb.get(search_email_list[emailsearch])
+              wb = r"{}".format(str(wb.page_source))
+              email_found = re.findall(r'[\w\.-]+@[\w\.-]+', wb)
+              search_email_results = search_email_results + email_found
+            except Exception:
+              pass
+
+            try:     
+              wb.get(search_email_list[emailsearch])
+              wb = r"{}".format(str(wb.page_source))
+              email_found = re.findall(r'[\w\.-]+ @ [\w\.-]+', wb)
+              search_email_results = search_email_results + email_found
+            except Exception:
+              pass
+
+                
+
+        #search for email in Facebook account:
+
+      try: 
+        for emailsearch in range(len(search_email_list)):
+          #print(search_email_list[emailsearch])
+          wb = webdriver.Chrome("chromedriver",options=options)
+          is_hyperlink = search_email_list[emailsearch]
+          if len(search_email_list[emailsearch]) > 0:
+            domain_check = is_hyperlink[emailsearch][-4]+is_hyperlink[emailsearch][-3]+is_hyperlink[emailsearch][-2]+is_hyperlink[emailsearch][-1]
+            if domain_check == '.com' or domain_check == '.net' or domain_check == '.org' or domain_check == '.gov':     
+              wb.get(search_email_list[emailsearch])
+              wb = r"{}".format(str(wb.page_source))
+              email_found = re.findall(r'[\w\.-]+@[\w\.-]+', wb)
+              search_email_results = search_email_results + email_found
+
+      except Exception:
+        pass
+
+
+#old facebook search
+
+      # if len(search_facebook_results) >0:
+      #   for emailsearch in range(len(search_facebook_results)):
+      #     #print(search_email_list[emailsearch])
+      #     wb = webdriver.Chrome("chromedriver",options=options)
+      #     wb.get(search_facebook_results[emailsearch]+'about/')
+      #     wb = r"{}".format(str(wb.page_source))
+      #     email_found = re.findall(r'[\w\.-]+@[\w\.-]+', wb)
+      #     search_email_results = search_email_results + email_found 
+
+
+
+#hyperlink check
+      is_hyperlink = search_email_results
+      for emails in range(len(is_hyperlink)):
+        if len(search_email_results[emails]) >5:
+          domain_check = is_hyperlink[emails][-4]+is_hyperlink[emails][-3]+is_hyperlink[emails][-2]+is_hyperlink[emails][-1]
+          if domain_check == '.com' or domain_check =='.net' or domain_check == '.org' or domain_check == '.gov':
+            hyperlink_leftovers.append(search_email_results[emails])
+        
+      search_email_results = hyperlink_leftovers    
+      search_email_results = pd.unique(search_email_results)
+      search_facebook_results = pd.unique(search_facebook_results)
+
+
+
+      #print(search_email_results)
+      
+
+
+      
+
+#End of If Statement if Name not Found:
+    else:
+      name = "ERROR!"
+      fencerurl = " http://ERROR"
+      
+      
+    
+    mapaddress = mapaddress.replace("/n","").strip()
+
+
+    
+    
+    #Print out statement as list:
+    if domain[0]== "+":
+      rowlist = [name, "DOMAIN NOT FOUND", search_facebook_results, domain, category, mapaddress, search_email_results]
+      print(rowlist)
+
+    else:
+      rowlist = [ name, domain,search_facebook_results, phone, category, mapaddress, search_email_results]
+      print(rowlist)
+
+    to_df.append(rowlist)
+
+
+      
+
+
+    name = "EMPTY"
+    domain = "EMPTY"
+    phone = "EMPTY"
+    mapaddress = "EMPTY"
+    category = "EMPTY"
+    search_facebook_results = []
+    search_email_results = []
+    is_hyperlink = []
+    hyperlink_leftovers = []
+
+
+
+print("\n\n FIN\n\n")
+columns = [ "Name", "URL", "Facebook", "Phone", "Category", "Address", "Emails"]
+df = pd.DataFrame(to_df, columns = columns )
+df
+from google.colab import files
+
+df.to_csv(csv_name)
+files.download(csv_name)
+
+from google.colab import output
+output.eval_js('new Audio("https://upload.wikimedia.org/wikipedia/commons/0/05/Beep-09.ogg").play()')
+
+
+
+
+
+
+
+#Second Cell, used if the file wasn't downloaded: 
+
+columns = [ "Name", "URL", "Facebook", "Phone", "Category", "Address", "Emails"]
+
+
+df = pd.DataFrame(to_df, columns = columns )
+df
+from google.colab import files
+
+df.to_csv(csv_name)
+files.download(csv_name)
+
